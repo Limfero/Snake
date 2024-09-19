@@ -6,9 +6,10 @@ public class Map
     private readonly float _offsetX;
     private readonly float _offsetY;
 
-    public Map(int size, float shift, float offsetX, float offsetY)
+    public Map(int sizeX, int sizeY, float shift, float offsetX, float offsetY)
     {
-        Size = size;
+        SizeX = sizeX;
+        SizeY = sizeY;
         Shift = shift;
         _offsetX = offsetX;
         _offsetY = offsetY;
@@ -16,12 +17,15 @@ public class Map
         GenerateMap();
     }
 
-    public int Size { get; private set; }
+    public int SizeX { get; private set; }
+
+    public int SizeY { get; private set; }
+
     public float Shift { get; private set; }
 
     public Vector2[,] Positions => _positions;
 
-    public Vector2 GetRandomPosition() => _positions[Random.Range(0, Size), Random.Range(0, Size)];
+    public Vector2 GetRandomPosition() => _positions[Random.Range(0, SizeX), Random.Range(0, SizeY)];
 
     public (int, int) GetPositionInMap(Vector2 position)
     {
@@ -39,13 +43,13 @@ public class Map
         float positionsY = _offsetY;
         float Xreset = positionsX;
 
-        _positions = new Vector2[Size, Size];
+        _positions = new Vector2[SizeX, SizeY];
 
-        for (int y = 0; y < Size; y++)
+        for (int y = 0; y < SizeY; y++)
         {
             positionsY -= Shift;
 
-            for (int x = 0; x < Size; x++)
+            for (int x = 0; x < SizeX; x++)
             {
                 positionsX += Shift;
                 _positions[x, y] = new Vector2(positionsX, positionsY);
