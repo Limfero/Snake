@@ -8,16 +8,12 @@ public class SnakeExpander : MonoBehaviour
     private Transform _spawnPosition;
     private Snake _snake;
     private float _speed;
-    private List<PartMovement> _parts;
-
-    public IReadOnlyList<PartMovement> Parts => _parts;
 
     public void Init(Transform position, Snake snake, float speed)
     {
         _spawnPosition = position;
         _snake = snake;
         _speed = speed;
-        _parts = new();
     }
 
     public void Expend()
@@ -26,7 +22,6 @@ public class SnakeExpander : MonoBehaviour
 
         PartMovement movement = Instantiate(_prefab, _spawnPosition.position, Quaternion.identity);
         movement.Init(_snake.Tail, _speed);
-        _parts.Add(movement);
 
         _spawnPosition = movement.Anchor;
     }

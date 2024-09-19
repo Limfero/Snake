@@ -1,8 +1,8 @@
 using System;
+using UnityEngine.SceneManagement;
+using UnityEngine;
 
 public class StartGamePanel : GamePanel
 {
-    public event Action Started;
-
-    protected override void OnButtonClick() => Started?.Invoke();
+    protected override void OnButtonClick() => SceneManager.LoadScene(1);
 }

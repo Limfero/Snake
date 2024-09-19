@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Root : MonoBehaviour
 {
@@ -8,7 +9,6 @@ public class Root : MonoBehaviour
     [SerializeField] private CollisionDetector _detector;
     [SerializeField] private CoinSpawner _spawner;
     [SerializeField] private EndGamePanel _endGamePanel;
-    [SerializeField] private StartGamePanel _startGamePanel;
     [SerializeField] private ScoreView _scoreView;
     [SerializeField] private Vector2 _startSnakePosition;
     [SerializeField] private Vector2 _mapOffset;
@@ -25,31 +25,23 @@ public class Root : MonoBehaviour
     {
         _detector.Died += Die;
         _endGamePanel.Restarted += Restart;
-        _startGamePanel.Started += OnStartGameClick;
     }
 
     private void OnDisable()
     {
         _detector.Died -= Die;
         _endGamePanel.Restarted -= Restart;
-        _startGamePanel.Started -= OnStartGameClick;
     }
 
     private void Awake()
     {
         _endGamePanel.Disable();
-        Time.timeScale = 0;
 
         _map = new Map((int)_size.x,(int)_size.y, _shift, _mapOffset.x, _mapOffset.y);
         DrowMap();
     }
 
     private void Start()
-    {
-        StartGame();
-    }
-
-    private void StartGame()
     {
         _snake = new Snake(_headMovement.transform.position);
         _snake.AddPart();
@@ -68,12 +60,6 @@ public class Root : MonoBehaviour
         _scoreView.Clear();
     }
 
-    private void OnStartGameClick()
-    {
-        Time.timeScale = 1;
-        _startGamePanel.Disable();
-    }
-
     private void Die()
     {
         Time.timeScale = 0;
@@ -82,13 +68,8 @@ public class Root : MonoBehaviour
 
     private void Restart()
     {
-        _endGamePanel.Disable();
-        OnStartGameClick();
-
-        foreach (var part in _expander.Parts)
-            Destroy(part.gameObject);
-
-        StartGame();
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void DrowMap()
